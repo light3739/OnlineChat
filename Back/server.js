@@ -60,6 +60,6 @@ app.use('/register', registerRouter);
 
 // Error handling
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error(err.stack);                             //example
     res.status(500).send('Something broke!');
 });
