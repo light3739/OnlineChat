@@ -75,6 +75,12 @@ function App() {
             })
             .then((data) => {
                 if (data.success) {
+                    const token = data.token;
+                    if (!token) {
+                        throw new Error('No token received');
+                    }
+                    localStorage.setItem('user', username);
+                    localStorage.setItem('token', token);
                     setUser(username);
                 }
             })

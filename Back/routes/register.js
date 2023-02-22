@@ -14,19 +14,15 @@ router.post('/', async (req, res) => {
 
         // Generate a unique secret key for the user
         const secretKey = generateUniqueKey();
-
+        
         // Create a new user
-        const user = new User({ username, password: hashedPassword, token: '', secretKey });
+        const user = new User({ username, password: hashedPassword, secretKey });
 
         // Save the user to the database
         const savedUser = await user.save();
 
         // Generate a JWT token for the user
         const token = jwt.sign({ id: savedUser._id }, secretKey);
-
-        // Update the token for the user
-        savedUser.token = token;
-        await savedUser.save();
 
         // Send the token back to the client
         res.cookie('token', token);
