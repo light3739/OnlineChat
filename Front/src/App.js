@@ -75,7 +75,7 @@ function App() {
                     path="/"
                     element={
                         user ? (
-                            <Chat
+                            <ChatPage
                                 user={user}
                                 typing={typing}
                                 message={message}
@@ -84,17 +84,29 @@ function App() {
                                 onLogout={handleLogout}
                             />
                         ) : (
-                            <Login onLogin={handleLogin} />
+                            <LoginPage onLogin={handleLogin} />
                         )
                     }
                 />
                 <Route
                     path="/register"
-                    element={<Register onRegister={handleRegister} />}
+                    element={<RegisterPage onRegister={handleRegister} />}
                 />
             </Routes>
         </BrowserRouter>
     );
+}
+
+function ChatPage({ user, typing, message, onSendMessage, onTextChange, onLogout }) {
+    return <Chat user={user} typing={typing} message={message} onSendMessage={onSendMessage} onTextChange={onTextChange} onLogout={onLogout} />;
+}
+
+function LoginPage({ onLogin }) {
+    return <Login onLogin={onLogin} />;
+}
+
+function RegisterPage({ onRegister }) {
+    return <Register onRegister={onRegister} />;
 }
 
 export default App;
