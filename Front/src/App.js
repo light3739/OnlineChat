@@ -24,9 +24,36 @@ function App() {
         localStorage.setItem('user', user);
     }, [user]);
 
-    const handleLogin = (username) => {
-        setUser(username);
+    const handleLogin = (username, password) => {
+        fetch('http://localhost:5000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        })
+            .then((res) => {
+                if (res.status === 200) {
+                    return res.json();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .then((data) => {
+                const token = data.token;
+                if (!token) {
+                    throw new Error('No token received');
+                }
+                localStorage.setItem('user', username);
+                localStorage.setItem('token', token);
+                setUser(username);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     };
+
+
 
     const handleLogout = () => {
         setUser(null);

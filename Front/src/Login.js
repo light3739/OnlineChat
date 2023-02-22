@@ -7,7 +7,7 @@ const Login = ({ onLogin }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onLogin(username);
+        onLogin(username,password);
     };
 
     return (

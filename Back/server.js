@@ -50,10 +50,10 @@ io.on('connection', (socket) => {
 
 // Routes
 const messageRoutes = require('./routes/messages');
-const userRoutes = require('./routes/users');
+const userRoutes = require('./routes/login');
 const registerRouter = require('./routes/register');
 app.use('/messages', messageRoutes);
-app.use('/users', userRoutes);
+app.use('/login', userRoutes);
 app.use('/register', registerRouter);
 
 // Middleware ?
