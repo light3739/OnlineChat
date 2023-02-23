@@ -2,7 +2,7 @@ import socketIOClient from 'socket.io-client';
 
 const ENDPOINT = 'http://localhost:5000';
 
-export const handleLogin = (username, password, setUser) => {
+export const handleLogin = (username, password, setUser, setIsAuthenticated) => {
     fetch('http://localhost:5000/login', {
         method: 'POST',
         headers: {
@@ -25,11 +25,14 @@ export const handleLogin = (username, password, setUser) => {
             localStorage.setItem('user', username);
             localStorage.setItem('token', token);
             setUser(username);
+            setIsAuthenticated(true); // set isAuthenticated to true
         })
         .catch((error) => {
             console.error('Error:', error);
+            setIsAuthenticated(false); // set isAuthenticated to false
         });
 };
+
 
 export const handleLogout = (setUser) => {
     localStorage.removeItem('user');
@@ -37,11 +40,11 @@ export const handleLogout = (setUser) => {
     setUser(null);
 };
 
-export const handleRegister = (username, password, setRegistrationSuccess) => {
-    fetch("http://localhost:5000/register", {
-        method: "POST",
+export const handleRegister = (username, password, setRegistrationSuccess, navigate) => {
+    fetch('http://localhost:5000/register', {
+        method: 'POST',
         headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
     })
@@ -49,7 +52,7 @@ export const handleRegister = (username, password, setRegistrationSuccess) => {
             if (res.ok) {
                 return res.json();
             }
-            throw new Error("Network response was not ok");
+            throw new Error('Network response was not ok');
         })
         .then((data) => {
             if (data.success) {
@@ -57,13 +60,9 @@ export const handleRegister = (username, password, setRegistrationSuccess) => {
             }
         })
         .catch((error) => {
-            console.error("Error:", error);
+            console.error('Error:', error);
         });
 };
-
-
-
-
 export const handleSendMessage = (user, message, setMessage) => {
     const socket = socketIOClient(ENDPOINT);
     socket.emit('message', { user, message });
