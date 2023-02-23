@@ -37,11 +37,11 @@ export const handleLogout = (setUser) => {
     setUser(null);
 };
 
-export const handleRegister = (username, password, setUser) => {
-    fetch('http://localhost:5000/register', {
-        method: 'POST',
+export const handleRegister = (username, password, setRegistrationSuccess) => {
+    fetch("http://localhost:5000/register", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
     })
@@ -49,23 +49,20 @@ export const handleRegister = (username, password, setUser) => {
             if (res.ok) {
                 return res.json();
             }
-            throw new Error('Network response was not ok');
+            throw new Error("Network response was not ok");
         })
         .then((data) => {
             if (data.success) {
-                const token = data.token;
-                if (!token) {
-                    throw new Error('No token received');
-                }
-                localStorage.setItem('user', username);
-                localStorage.setItem('token', token);
-                setUser(username);
+                setRegistrationSuccess(true);
             }
         })
         .catch((error) => {
-            console.error('Error:', error);
+            console.error("Error:", error);
         });
 };
+
+
+
 
 export const handleSendMessage = (user, message, setMessage) => {
     const socket = socketIOClient(ENDPOINT);

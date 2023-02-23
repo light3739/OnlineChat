@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
 
         // Send the token back to the client
         res.cookie('token', token);
-        res.status(200).json({ success: true });
+        res.status(200).json({ success: true , token });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

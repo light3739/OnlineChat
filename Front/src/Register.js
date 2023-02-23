@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
-const Register = ({ onRegister }) => {
+import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
+//TODO добавь перенаправление
+const Register = ({onRegister}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,15 +19,16 @@ const Register = ({ onRegister }) => {
             <form onSubmit={handleSubmit}>
                 <label>
                     Username:
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
                 </label>
                 <label>
                     Password:
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </label>
                 <label>
                     Confirm Password:
-                    <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                    <input type="password" value={confirmPassword}
+                           onChange={(e) => setConfirmPassword(e.target.value)}/>
                 </label>
                 <button type="submit">Register</button>
             </form>
