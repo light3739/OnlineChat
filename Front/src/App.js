@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import socketIOClient from 'socket.io-client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './Login';
 import Chat from './Chat';
+import Login from './Login';
 import Register from './Register';
+import { handleLogin, handleLogout, handleRegister } from './handlers';
 
 const ENDPOINT = 'http://localhost:5000';
 
@@ -24,71 +25,6 @@ function App() {
         localStorage.setItem('user', user);
     }, [user]);
 
-    const handleLogin = (username, password) => {
-        fetch('http://localhost:5000/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        })
-            .then((res) => {
-                if (res.status === 200) {
-                    return res.json();
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            })
-            .then((data) => {
-                const token = data.token;
-                if (!token) {
-                    throw new Error('No token received');
-                }
-                localStorage.setItem('user', username);
-                localStorage.setItem('token', token);
-                setUser(username);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    };
-
-
-
-    const handleLogout = () => {
-        setUser(null);
-    };
-
-    const handleRegister = (username, password) => {
-        fetch('http://localhost:5000/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                throw new Error('Network response was not ok');
-            })
-            .then((data) => {
-                if (data.success) {
-                    const token = data.token;
-                    if (!token) {
-                        throw new Error('No token received');
-                    }
-                    localStorage.setItem('user', username);
-                    localStorage.setItem('token', token);
-                    setUser(username);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    };
-
     const handleSendMessage = (message) => {
         const socket = socketIOClient(ENDPOINT);
         socket.emit('message', { user, message });
@@ -108,38 +44,23 @@ function App() {
                     path="/"
                     element={
                         user ? (
-                            <ChatPage
+                            <Chat
                                 user={user}
                                 typing={typing}
                                 message={message}
                                 onSendMessage={handleSendMessage}
                                 onTextChange={handleTextChange}
-                                onLogout={handleLogout}
+                                onLogout={() => handleLogout(setUser)}
                             />
                         ) : (
-                            <LoginPage onLogin={handleLogin} />
+                            <Login onLogin={(username, password) => handleLogin(username, password, setUser)} />
                         )
                     }
                 />
-                <Route
-                    path="/register"
-                    element={<RegisterPage onRegister={handleRegister} />}
-                />
+                <Route path="/register" element={<Register onRegister={(username, password) => handleRegister(username, password, setUser)} />} />
             </Routes>
         </BrowserRouter>
     );
-}
-
-function ChatPage({ user, typing, message, onSendMessage, onTextChange, onLogout }) {
-    return <Chat user={user} typing={typing} message={message} onSendMessage={onSendMessage} onTextChange={onTextChange} onLogout={onLogout} />;
-}
-
-function LoginPage({ onLogin }) {
-    return <Login onLogin={onLogin} />;
-}
-
-function RegisterPage({ onRegister }) {
-    return <Register onRegister={onRegister} />;
 }
 
 export default App;
