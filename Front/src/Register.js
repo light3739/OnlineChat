@@ -22,6 +22,7 @@ const Register = ({onRegister}) => {
                 <div>
                     <p>Registration successful! Please log in. </p>
                     <Navigate to="/" replace={true}/>
+
                 </div>
             ) : (
                 <form onSubmit={handleSubmit}>

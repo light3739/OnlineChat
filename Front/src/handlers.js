@@ -1,8 +1,10 @@
 import socketIOClient from 'socket.io-client';
+import { createBrowserHistory } from 'history';
 
+export const history = createBrowserHistory();
 const ENDPOINT = 'http://localhost:5000';
 
-export const handleLogin = (username, password, setUser, setIsAuthenticated) => {
+export const handleLogin = (username, password, setUser, setIsAuthenticated, setError) => {
     fetch('http://localhost:5000/login', {
         method: 'POST',
         headers: {
@@ -25,13 +27,17 @@ export const handleLogin = (username, password, setUser, setIsAuthenticated) => 
             localStorage.setItem('user', username);
             localStorage.setItem('token', token);
             setUser(username);
-            setIsAuthenticated(true); // set isAuthenticated to true
+            setIsAuthenticated(true);
+            // set isAuthenticated to true
+            // redirect user to chat page
         })
         .catch((error) => {
             console.error('Error:', error);
             setIsAuthenticated(false); // set isAuthenticated to false
+            setError('Username or password is incorrect');
         });
 };
+
 
 
 export const handleLogout = (setUser) => {
@@ -56,6 +62,7 @@ export const handleRegister = (username, password, setRegistrationSuccess, navig
         })
         .then((data) => {
             if (data.success) {
+                localStorage.setItem('user', username);
                 setRegistrationSuccess(true);
             }
         })
@@ -63,6 +70,7 @@ export const handleRegister = (username, password, setRegistrationSuccess, navig
             console.error('Error:', error);
         });
 };
+
 export const handleSendMessage = (user, message, setMessage) => {
     const socket = socketIOClient(ENDPOINT);
     socket.emit('message', { user, message });

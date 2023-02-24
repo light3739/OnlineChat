@@ -1,8 +1,14 @@
 import React from 'react';
-import { Route, Navigate, Outlet } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
-const PrivateRoute = ({ setIsAuthenticated }) => {
-    return setIsAuthenticated ? <Outlet /> : <Navigate to="/"  replace={true} />;
-};
+function PrivateRoute({ children }) {
+    const isAuthenticated = localStorage.getItem('user') !== null && localStorage.getItem('token') !== null ;
+    const location = useLocation();
+    if (!isAuthenticated) {
+        return <Navigate to="/" state={{ from: location }} replace />;
+    }
+
+    return children;
+}
 
 export default PrivateRoute;
