@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
 });
 
 // Routes
-const messageRoutes = require('./routes/messages');
+const messageRoutes = require('./routes/messages')(io); // pass io object
 const userRoutes = require('./routes/login');
 const registerRouter = require('./routes/register');
 app.use('/messages', messageRoutes);
