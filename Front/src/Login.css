@@ -1,32 +1,75 @@
 .login-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    height: 100%;
+    justify-content: center;
+    height: 100vh;
+    background-color: #000;
+    color: #fff;
 }
 
-input[type="text"] {
-    margin: 10px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-    font-size: 1rem;
+h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #0ff, 0 0 80px #0ff, 0 0 90px #0ff, 0 0 100px #0ff, 0 0 150px #0ff;
 }
 
-button[type="submit"] {
-    margin: 10px;
-    padding: 10px;
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+label {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+input {
+    padding: 0.5rem;
     border: none;
     border-radius: 5px;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-    background-color: #007bff;
-    color: white;
-    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    background-color: #000;
+    color: #fff;
+    box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff, 0 0 80px #0ff;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    background-color: #0ff;
+    color: #000;
+    text-shadow: none;
+    box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff, 0 0 80px #0ff;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
-button[type="submit"]:hover {
-    background-color: #0069d9;
+button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #0ff, 0 0 80px #0ff;
+}
+
+p {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+}
+
+a {
+    color: #0ff;
+    text-decoration: none;
+    border-bottom: 2px solid #0ff;
+}
+
+a:hover {
+    color: #fff;
+    border-bottom: 2px solid #fff;
 }

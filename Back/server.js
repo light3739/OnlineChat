@@ -10,8 +10,8 @@ const User = require('./models/User');
 
 // Set up the app
 const app = express();
+app.use(cors()); // Enable CORS for all origins
 app.use(express.json());
-app.use(cors());
 
 // Set the strictQuery option to false
 mongoose.set('strictQuery', false);
@@ -23,10 +23,14 @@ mongoose.connect('mongodb://127.0.0.1:27017/chat');
 const server = app.listen(5000, () => {
     console.log('Server listening on port 5000');
 });
-const io = socketIo(server);
+
+const io = socketIo(server, {
+    cors: {
+        origin: '*', // Allow all origins
+    },
+});
 
 io.on('connection', (socket) => {
-    console.log('New client connected');
 
     socket.on('message', async (data) => {
         console.log('Message received:', data);
@@ -49,6 +53,7 @@ io.on('connection', (socket) => {
 });
 
 // Routes
+
 const messageRoutes = require('./routes/messages')(io); // pass io object
 const userRoutes = require('./routes/login');
 const registerRouter = require('./routes/register');
@@ -58,8 +63,9 @@ app.use('/register', registerRouter);
 
 // Middleware ?
 
+
 // Error handling
 app.use((err, req, res, next) => {
-    console.error(err.stack);                             //example
+    console.error(err.stack); //example
     res.status(500).send('Something broke!');
 });

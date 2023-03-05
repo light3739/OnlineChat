@@ -44,6 +44,7 @@ export const handleLogout = (setUser) => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     setUser(null);
+    window.location.reload()
 };
 
 export const handleRegister = (username, password, setRegistrationSuccess, navigate) => {

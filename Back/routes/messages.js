@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Message = require('../models/Message');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = function(io) {
     router.get('/', async (req, res) => {
@@ -20,12 +21,13 @@ module.exports = function(io) {
             }
 
             const message = new Message({
+                id: uuidv4(),
                 user: req.body.user,
                 text: req.body.text,
                 timestamp: req.body.timestamp
             });
             const savedMessage = await message.save();
-            io.emit('message', savedMessage);
+            io.emit('message', savedMessage); // emit the message to all clients
             res.json(savedMessage);
         } catch (error) {
             console.error('Error saving message:', error);
@@ -33,6 +35,28 @@ module.exports = function(io) {
         }
     });
 
+    // Listen to the 'message' event to receive new messages in real-time
+    io.on('connection', (socket) => {
+        console.log(`User ${socket.id} connected`);
+        socket.on('message', async (newMessage) => {
+            try {
+                const message = new Message({
+                    id: uuidv4(),
+                    user: newMessage.user,
+                    text: newMessage.text,
+                    timestamp: newMessage.timestamp
+                });
+                const savedMessage = await message.save();
+                io.emit('message', savedMessage); // emit the message to all clients
+            } catch (error) {
+                console.error('Error saving message:', error);
+            }
+        });
+
+        socket.on('disconnect', () => {
+            console.log(`User ${socket.id} disconnected`);
+        });
+    });
 
     return router;
 };

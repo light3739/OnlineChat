@@ -1,0 +1,43 @@
+:root {
+    --neon-blue: #192841;
+    --neon-yellow: #f4d03f;
+}
+.message-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.message-user {
+    font-weight: bold;
+    color: var(--neon-yellow);
+    font-size: 0.8rem;
+}
+
+.message-text {
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 10px;
+    background-color: var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-blue);
+    position: relative;
+}
+
+.message-text::before,
+.message-text::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+}
+
+
+
+.message-timestamp {
+    font-size: 0.8rem;
+    color: var(--neon-yellow);
+}
+
