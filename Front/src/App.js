@@ -65,7 +65,6 @@
                                 <PrivateRoute>
 
                                     <Chat
-                                        user={user}
                                         typing={typing}
                                         message={message}
                                         onTextChange={handleTextChange}

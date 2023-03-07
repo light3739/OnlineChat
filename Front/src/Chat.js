@@ -4,7 +4,8 @@ import Message from './Message';
 import styles from './Chat.module.css';
 
 
-const Chat = ({ user, onLogout, typing, message, onTextChange }) => {
+const Chat = ({  onLogout, typing, message, onTextChange }) => {
+    const user = localStorage.getItem('user')
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
     const [inputValue, setInputValue] = useState('');
@@ -16,9 +17,7 @@ const Chat = ({ user, onLogout, typing, message, onTextChange }) => {
             .catch((error) => console.error('Error fetching messages:', error));
     };
     useEffect(() => {
-        if (!user) {
-            window.location.reload();
-        }
+
         // Create a socket connection to the server
         const newSocket = io('http://localhost:5000');
         setSocket(newSocket);
@@ -36,7 +35,6 @@ const Chat = ({ user, onLogout, typing, message, onTextChange }) => {
 
             // Listen to the 'message' event to receive new messages in real-time
             socket.on('message', (newMessage) => {
-                console.log('Allo')
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             });
         }
@@ -49,37 +47,19 @@ const Chat = ({ user, onLogout, typing, message, onTextChange }) => {
 
     const handleSendMessage = (event) => {
         event.preventDefault();
+
         const newMessage = {
             text: inputValue,
             user: user,
             timestamp: new Date().toISOString(),
         };
-
-
+        setInputValue('');
         socket.emit('message', newMessage, () => {
-            // The callback function is called when the message is sent
-
-            // Update the state of messages with the newly sent message
             setMessages((prevMessages) => [...prevMessages, newMessage]);
         });
 
-        setInputValue('');
-
-        fetch('http://localhost:5000/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newMessage),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
     };
+
 
     useEffect(() => {
         if (messagesContainerRef.current) {
@@ -91,7 +71,7 @@ const Chat = ({ user, onLogout, typing, message, onTextChange }) => {
             <div className={styles.container}>
                 <div className={styles['chat-container']}>
                     <div className={styles['chat-header']}>
-                        <h1>Welcome, {localStorage.getItem('user')}</h1>
+                        <h1>Welcome, {user}</h1>
                         <button onClick={onLogout}>Logout</button>
                     </div>
                     <div ref={messagesContainerRef} className={styles['messages-container']}>

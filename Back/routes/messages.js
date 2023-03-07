@@ -21,7 +21,6 @@ module.exports = function(io) {
             }
 
             const message = new Message({
-                id: uuidv4(),
                 user: req.body.user,
                 text: req.body.text,
                 timestamp: req.body.timestamp
@@ -33,29 +32,6 @@ module.exports = function(io) {
             console.error('Error saving message:', error);
             res.sendStatus(500);
         }
-    });
-
-    // Listen to the 'message' event to receive new messages in real-time
-    io.on('connection', (socket) => {
-        console.log(`User ${socket.id} connected`);
-        socket.on('message', async (newMessage) => {
-            try {
-                const message = new Message({
-                    id: uuidv4(),
-                    user: newMessage.user,
-                    text: newMessage.text,
-                    timestamp: newMessage.timestamp
-                });
-                const savedMessage = await message.save();
-                io.emit('message', savedMessage); // emit the message to all clients
-            } catch (error) {
-                console.error('Error saving message:', error);
-            }
-        });
-
-        socket.on('disconnect', () => {
-            console.log(`User ${socket.id} disconnected`);
-        });
     });
 
     return router;
